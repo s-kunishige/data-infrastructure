@@ -1,0 +1,9 @@
+# timezone: "Asia/Tokyo"
+timezone: UTC
+
+schedule:
+  seconds_interval>: 10
+
+# pythonのファイル名.クラス名.関数名の順に記述する。クラスがなければファイル名.関数名で良い。
++python_program:
+  py>: hello_world.sample_def
