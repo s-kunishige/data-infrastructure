@@ -32,3 +32,15 @@ filters:
     - { name: account }
 ```
 を追加することで指定した列をハッシュ化できる
+
+# digdagのサンプル
+```
+digdag init mydag
+```
+でサンプルファイルを作成
+
+```
+cd mydag
+digdag run mydag.dig
+```
+でサンプルを実行
