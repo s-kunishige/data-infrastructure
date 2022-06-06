@@ -1,0 +1,59 @@
+# timezone: "Asia/Tokyo"
+timezone: UTC
+
+schedule:
+  seconds_interval>: 10
+#   daily>: 00:00:00 #毎日0時
+#   minutes_interval>: 5 #５分おき
+
+#パラメータの設定
+_export:
+  var1: "digdag"
+
+# +タスク名:
+#  oparator名>: #参考: http://docs.digdag.io/operators.html 
+
++current_date:
+  sh>: echo `date`
+
++echo_sample:
+  # 変数を使用
+  echo>: ${var1}
+
+# 3つのタスクを並列で実行
++prepare:
+  # +data1, +data2, and +data3 run in parallel.
+  _parallel: true
+
+  +data1:
+    echo>: data1
+
+  +data2:
+    echo>: data2
+
+  +data3:
+    echo>: data3
+
++background_sample:
+  +data1:
+    echo>: task1
+
+  # +data1 and +data2 run in parallel.
+  +data2:
+    _background: true
+    echo>: task2
+
+  # +data3 runs after +data1 and +data2.
+  +data3:
+    echo>: task3
+
++repeat:
+  loop>: 7
+  _do:
+    +step1:
+      echo>: ${moment(session_time).add(i, 'days')} is ${i} days later than ${session_date}
+    +step2:
+      echo>: ${moment(session_time).add(i, 'hours')} is ${i} hours later than ${session_local_time}.
+
+_error:
+  sh>: echo 'error'
