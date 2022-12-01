@@ -1,0 +1,48 @@
+# exec:
+#   max_threads: 8
+#   min_output_tasks: 8
+in:
+  type: bigquery
+  project: 'sente-279001'
+  keyfile: '/workspace/embulk/credentials.json'
+  sql: 'SELECT _id, data FROM `sente-279001.crawler.crawler_test` limit 10'
+  columns:
+    - {name: _id, type: string}
+    - {name: data, type: string}
+  incremental: true
+  incremental_column: [_id]
+  max: 1
+  # # If your data is in a location other than the US or EU multi-region, you must specify the location.
+  # location: asia-northeast1
+filters:
+  - type: expand_json
+    json_column_name: data # 元データの格納先としてjson_payloadカラムを指定
+    root: "$." # JsonPATHで、rootを起点とするように設定
+    expanded_columns:
+      # - {name: "text", type: string}
+      - {name: "documentLastModified", type: timestamp, format: '%m/%d/%Y %H:%M:%S'} # 小数 %N  タイムゾーン %z
+      - {name: allExtractedContents.favicon, type: string}
+      - {name: allExtractedContents.title, type: string}
+      - {name: date, type: string}
+  - type: rename
+    columns:
+      # date: 日付
+      allExtractedContents.favicon: favicon
+      allExtractedContents.title: title
+# out:
+#   type: postgresql
+#   host: db
+#   user: postgres
+#   password: "postgres"
+#   database: postgres
+#   table: my_table
+#   mode: insert
+out:
+  type: file
+  path_prefix: test
+  file_ext: .csv
+  formatter:
+    type: csv
+    header_line: true
+    charset: UTF-8
+    newline: CRLF
