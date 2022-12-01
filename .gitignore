@@ -2,3 +2,4 @@
 /.digdag-wrapper
 .digdag
 *.pyc
+credentials.json
