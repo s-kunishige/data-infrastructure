@@ -1,3 +1,15 @@
+# embulkのプラグイン
+embulk-output-bigqueryのバグで  
+インストール時に`jwt requires Ruby version >= 2.5.`のエラーが出る  
+回避するには
+```
+embulk gem install representable -v 3.0.4
+embulk gem install public_suffix -v 4.0.7
+embulk gem install jwt:2.3.0
+embulk gem install embulk-input-bigquery
+```
+の手順でインストールする [参考1](https://zenn.dev/hiroysato/articles/35a26bbe466f0b) [参考2](https://qiita.com/kaaaaaaaaaaai/items/6c2a459236ff2f714dc8)
+
 # embulkのサンプル
 
 exampleコマンドでサンプルファイルを生成
